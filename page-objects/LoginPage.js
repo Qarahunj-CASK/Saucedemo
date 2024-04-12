@@ -28,20 +28,4 @@ exports.LoginPage = class LoginPage {
   async clickLoginButton() {
     await this.loginButton.click();
   }
-
-  getErrorField() {
-    return this.errorField;
-  }
-
-  getUsernameField() {
-    return this.username;
-  }
-
-  getPasswordField() {
-    return this.password;
-  }
-
-  getLoginButtonLocator() {
-    return this.loginButton;
-  }
 };

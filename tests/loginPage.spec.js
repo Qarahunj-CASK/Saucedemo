@@ -11,9 +11,9 @@ if (USER_NAME === 'locked_out_user') {
   test('Ensure that the login is not possible with logged out user.', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await expect(loginPage.getUsernameField()).toBeEmpty();
-    await expect(loginPage.getPasswordField()).toBeEmpty();
-    await expect(loginPage.getLoginButtonLocator()).toBeDisabled();
+    await expect(loginPage.username).toBeEmpty();
+    await expect(loginPage.password).toBeEmpty();
+    await expect(loginPage.loginButton).toBeDisabled();
   });
 } else {
   test('Authorization with valid credentials', async ({ page }) => {
@@ -31,7 +31,7 @@ if (USER_NAME === 'locked_out_user') {
     await loginPage.fillUsernameField('invalid_username');
     await loginPage.fillPasswordField(PASSWORD);
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(usernameAndPasswordError);
+    await expect(loginPage.errorField).toHaveText(usernameAndPasswordError);
   });
 
   test('Authorization with valid username and invalid password', async ({ page }) => {
@@ -40,7 +40,7 @@ if (USER_NAME === 'locked_out_user') {
     await loginPage.fillUsernameField(USER_NAME);
     await loginPage.fillPasswordField('invalid_password');
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(usernameAndPasswordError);
+    await expect(loginPage.errorField).toHaveText(usernameAndPasswordError);
   });
 
   test('Authorization with invalid username and invalid password', async ({ page }) => {
@@ -49,42 +49,42 @@ if (USER_NAME === 'locked_out_user') {
     await loginPage.fillUsernameField('invalid_username');
     await loginPage.fillPasswordField('invalid_password');
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(usernameAndPasswordError);
+    await expect(loginPage.errorField).toHaveText(usernameAndPasswordError);
   });
 
   test('Authorization with empty username', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await expect(loginPage.getUsernameField()).toBeEmpty();
+    await expect(loginPage.username).toBeEmpty();
     await loginPage.fillPasswordField(PASSWORD);
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(usernameIsEmptyError);
+    await expect(loginPage.errorField).toHaveText(usernameIsEmptyError);
   });
 
   test('Authorization with empty password', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.fillUsernameField(USER_NAME);
-    await expect(loginPage.getPasswordField()).toBeEmpty();
+    await expect(loginPage.password).toBeEmpty();
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(passwordIsEmtyError);
+    await expect(loginPage.errorField).toHaveText(passwordIsEmtyError);
   });
 
   test('Authorization with an empty username and password', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await expect(loginPage.getUsernameField()).toBeEmpty();
-    await expect(loginPage.getPasswordField()).toBeEmpty();
+    await expect(loginPage.username).toBeEmpty();
+    await expect(loginPage.password).toBeEmpty();
     await loginPage.clickLoginButton();
-    await expect(loginPage.getErrorField()).toHaveText(usernameIsEmptyError);
+    await expect(loginPage.errorField).toHaveText(usernameIsEmptyError);
   });
 
   test('Ensure that the login button is unclickable when both the login and password fields are empty.', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await expect(loginPage.getUsernameField()).toBeEmpty();
-    await expect(loginPage.getPasswordField()).toBeEmpty();
-    await expect(loginPage.getLoginButtonLocator()).toBeDisabled();
+    await expect(loginPage.username).toBeEmpty();
+    await expect(loginPage.password).toBeEmpty();
+    await expect(loginPage.loginButton).toBeDisabled();
   });
 
   test('Ensure that login is possible with the Enter button.', async ({ page }) => {
