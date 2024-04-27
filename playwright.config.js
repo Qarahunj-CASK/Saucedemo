@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 // @ts-check
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { defineConfig, devices } = require('@playwright/test');

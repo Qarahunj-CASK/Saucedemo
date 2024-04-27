@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../page-objects/LoginPage');
 

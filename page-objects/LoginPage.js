@@ -28,4 +28,11 @@ exports.LoginPage = class LoginPage {
   async clickLoginButton() {
     await this.loginButton.click();
   }
+
+  async login(USER_NAME, PASSWORD) {
+    await this.goto();
+    await this.fillUsernameField(USER_NAME);
+    await this.fillPasswordField(PASSWORD);
+    await this.clickLoginButton();
+  }
 };
