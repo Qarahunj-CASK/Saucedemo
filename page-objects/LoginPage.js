@@ -1,9 +1,11 @@
 /* eslint-disable linebreak-style */
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { expect } = require('@playwright/test');
+const { ReusablePageObject } = require('./ReusablePageObjects');
 
-exports.LoginPage = class LoginPage {
+exports.LoginPage = class LoginPage extends ReusablePageObject {
   constructor(page) {
+    super(page);
     this.page = page;
     this.username = page.locator('#user-name');
     this.password = page.locator('#password');
@@ -27,5 +29,13 @@ exports.LoginPage = class LoginPage {
 
   async clickLoginButton() {
     await this.loginButton.click();
+  }
+
+  async loginToThePage(username, password, url) {
+    await this.goto();
+    await this.fillUsernameField(username);
+    await this.fillPasswordField(password);
+    await this.clickLoginButton();
+    await super.checkURL(url);
   }
 };
