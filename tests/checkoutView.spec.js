@@ -20,6 +20,11 @@ test('Verify that shopping cart button returns "Your cart" page', async ({ page 
   await expect(page.locator('[data-test="title"]')).toHaveText('Your Cart');
 });
 
+// eslint-disable-next-line max-len
+// test('Verify that item title, description and the price are the same as in product page', async ({ page }) => {
+
+// });
+
 test('Verify by clicking item title button returns one item page', async ({ page }) => {
   await page.goto('/inventory.html');
   await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
@@ -40,33 +45,25 @@ test('Verify that the Finish Button redirects to the Complete Page', async ({ pa
   await expect(page.locator('[data-test="title"]')).toHaveText('Checkout: Complete!');
 });
 
-test('Verify That the "tax" is 8% of "Item Total", async', async ({ page }) => {
-  const total = page.locator('[data-test="subtotal-label"]').textContent() * 0.08;
-  await page.goto('/inventory.html');
-  await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+test('Verify that the "Payment Information" and "Shipping Information" titles are displaying the right information', async ({ page }) => {
   await page.goto('/checkout-step-two.html');
-  await expect(page.locator('[data-test="tax-label"]').textContent()).toBe(total);
+  await expect(page.locator('[data-test="payment-info-value"]')).toHaveText('SauceCard #31337');
+  await expect(page.locator('[data-test="shipping-info-value"]')).toHaveText('Free Pony Express Delivery!');
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
 // test('Verify That the "Item Total" is the sum of all chosen item prices', async ({ page }) => {
-//   const value1 = page.getByText('$29.99').textContent();
-//   const value2 = page.getByText('$9.99').textContent();
-//   const total = value1 + value2;
-//   await page.goto('/inventory.html');
-//   await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
-//   await page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click();
-//   await page.goto('/checkout-step-two.html');
-//   await expect(page.locator('[data-test="summary-total"]').textContent()).toBe(total);
 // });
+
+// test('Verify That the "tax" is 8% of "Item Total", async', async ({ page }) => {
+// 
+// });
+
+test('Verify that Total is the sum of Tax and Item Total', async ({ page }) => {
+  await page.goto('/checkout-step-two.html');
+  const itemTotalText = await page.textContent('.summary_subtotal_label');
+  const taxText = await page.textContent('.summary_tax_label');
+  const itemTotal = parseFloat(itemTotalText.substring(13));
+  const tax = parseFloat(taxText.substring(5));
+  const total = itemTotal + tax;
+  const totaltext = await page.textContent('.summary_total_label');
+});
