@@ -14,25 +14,30 @@ test.beforeEach(async ({ page }) => {
 
 test('Verify that clicking on the item title opens the item in a different page URL.', async ({ page }) => {
   const itemsList = new ItemsList(page);
-  await itemsList.itemname1.click();
-  await expect(page.url()).toContain('inventory-item');
+  await itemsList.clickonTitle(0);
+  await expect(page).toHaveURL('/inventory-item.html?id=4');
 });
 
 test('Verify that by clicking add to cart it adds an item to shoping cart', async ({ page }) => {
   const itemsList = new ItemsList(page);
-  await itemsList.addtocart.click();
+  await itemsList.addtocartButton(2);
   await expect(itemsList.shoppingcart).toHaveText('1');
-  await itemsList.shoppingcart.click();
-  await expect(page.locator('.inventory_item_name')).toHaveText('Sauce Labs Backpack');
+  const titilename = await page.locator('.inventory_item_name').nth(2).innerText();
+  await itemsList.clickonShoppingCart();
+  await expect(page).toHaveURL('/cart.html');
+  await expect(page.locator('.inventory_item_name')).toHaveText(titilename);
 });
-test('Verify that by clicking remove  cart button it removes the item from shoping cart', async ({ page }) => {
+test('Verify that by clicking remove  cart button, it removes the item from shoping cart', async ({ page }) => {
   const itemsList = new ItemsList(page);
-  await itemsList.addtocart.click();
+  await itemsList.addtocartButton(2);
   await expect(itemsList.shoppingcart).toHaveText('1');
-  await itemsList.removecart.click();
-  await expect(itemsList.shoppingcart).toHaveText('');
+  const titilename = await page.locator('.inventory_item_name').nth(2).innerText();
+  await itemsList.clickonShoppingCart();
+  await expect(page).toHaveURL('/cart.html');
+  await page.locator('.btn.btn_secondary.btn_small.cart_button').nth(0).click();
+  await expect(page.locator('.inventory_item_name')).not.toBeVisible(titilename);
 });
-test('Verify src attribute changes for each image', async ({ page }) => {
+test('Verify that photos are not repetitave', async ({ page }) => {
   const firstSrc = await page.$eval('img', (img) => img.src);
   const secondSrc = await page.$$eval('img', (images) => images[1].src);
   expect(firstSrc).not.toBe(secondSrc);
