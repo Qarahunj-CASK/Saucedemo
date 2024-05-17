@@ -4,14 +4,15 @@
 exports.ItemsList = class ItemsList {
   constructor(page) {
     this.page = page;
-    this.itemname1 = page.locator('.inventory_item_name');
+    this.producttitleSelector = page.locator('.inventory_item_name');
     this.addtocart = page.locator('.btn.btn_primary.btn_small.btn_inventory');
     this.shoppingcart = page.locator('.shopping_cart_link');
     this.removecart = page.locator('#remove-sauce-labs-backpack');
+    this.productImage = page.locator('img[class="inventory_item_img"]');
   }
 
   async clickonTitle(number) {
-    await this.itemname1.nth(number).click();
+    await this.producttitleSelector.nth(number).click();
   }
 
   async clickonShoppingCart() {

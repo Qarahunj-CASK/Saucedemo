@@ -1,8 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/no-extraneous-dependencies */
 
-const { expect } = require('@playwright/test');
-
 exports.SortingBarPage = class SortingBarPage {
   constructor(page) {
     this.page = page;
