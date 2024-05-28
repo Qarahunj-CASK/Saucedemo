@@ -10,8 +10,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.44.0",
     "@types/node": "^20.11.28",
+    "allure-playwright": "^2.15.1",
     "eslint": "^8.57.0"
   },
   "dependencies": {
