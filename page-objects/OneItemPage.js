@@ -1,5 +1,5 @@
-/* eslint-disable no-return-await */
 /* eslint-disable linebreak-style */
+/* eslint-disable no-return-await */
 /* eslint-disable no-extra-semi */
 /* eslint-disable semi */
 /* eslint-disable indent */
