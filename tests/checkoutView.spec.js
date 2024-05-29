@@ -1,4 +1,5 @@
-/* eslint-disable no-await-in-loop */
+/* eslint-disable linebreak-style */
+// eslint-disable no-await-in-loop //
 /* eslint-disable linebreak-style */
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../page-objects/LoginPage');
@@ -15,131 +16,92 @@ test.beforeEach(async ({ page }) => {
 
 test('Verify that shopping cart button returns "Your cart" page', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
+  await checkoutViewPage.performCheckoutView();
   await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await expect(page.locator('[data-test="title"]')).toHaveText('Your Cart');
+  await expect(checkoutViewPage.pageTitle).toHaveText('Your Cart');
 });
 
 // eslint-disable-next-line max-len
 test('Verify that item title, description and the price are the same as in product page', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  const productTitle = await page.locator('[data-test="inventory-item-name"]').nth(0).textContent();
-  const productDescription = await page.locator('[data-test="inventory-item-desc"]').nth(0).textContent();
-  const productPrice = await page.locator('[data-test="inventory-item-price"]').nth(0).textContent();
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
+  const productTitle = await checkoutViewPage.inventoryItemName.nth(0).textContent();
+  const productDescription = await checkoutViewPage.inventoryItemDesc.nth(0).textContent();
+  const productPrice = await checkoutViewPage.inventoryItemPrice.nth(0).textContent();
+  await checkoutViewPage.addToCartButton.nth(0).click();
   await checkoutViewPage.shoppingCartButton.click();
   await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
+  await checkoutViewPage.fillCheckoutFormFields('asd', 'asd', 'asd');
   await checkoutViewPage.continueButton.click();
-  await expect(page.locator('[data-test="inventory-item-name"]')).toHaveText(productTitle);
-  await expect(page.locator('[data-test="inventory-item-desc"]')).toHaveText(productDescription);
-  await expect(page.locator('[data-test="inventory-item-price"]')).toHaveText(productPrice);
+  await expect(checkoutViewPage.inventoryItemName).toHaveText(productTitle);
+  await expect(checkoutViewPage.inventoryItemDesc).toHaveText(productDescription);
+  await expect(checkoutViewPage.inventoryItemPrice).toHaveText(productPrice);
 });
 
 test('Verify by clicking item title button returns one item page', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  await page.locator('[data-test="inventory-item-name"]').click();
+  await checkoutViewPage.performCheckoutView();
+  await checkoutViewPage.inventoryItemName.click();
   await expect(page.getByText('Back to products')).toBeVisible();
 });
 
 test('Verify That the Cancel Button Returns to the Product Page', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  await page.locator('[data-test="cancel"]').click();
-  await expect(page.locator('[data-test="title"]')).toHaveText('Products');
+  await checkoutViewPage.performCheckoutView();
+  await checkoutViewPage.cancelButton.click();
+  await expect(checkoutViewPage.pageTitle).toHaveText('Products');
 });
 
 test('Verify that the Finish Button redirects to the Complete Page', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  await page.locator('[data-test="finish"]').click();
-  await expect(page.locator('[data-test="title"]')).toHaveText('Checkout: Complete!');
+  await checkoutViewPage.performCheckoutView();
+  await checkoutViewPage.finishButton.click();
+  await expect(checkoutViewPage.pageTitle).toHaveText('Checkout: Complete!');
 });
 
 test('Verify that the "Payment Information" and "Shipping Information" titles are displaying the right information', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  await expect(page.locator('[data-test="payment-info-value"]')).toHaveText('SauceCard #31337');
-  await expect(page.locator('[data-test="shipping-info-value"]')).toHaveText('Free Pony Express Delivery!');
+  await checkoutViewPage.performCheckoutView();
+  await expect(checkoutViewPage.paymentInfoValue).toHaveText('SauceCard #31337');
+  await expect(checkoutViewPage.shippingInfoValue).toHaveText('Free Pony Express Delivery!');
 });
 
 test('Verify That the "Item Total" is the sum of all chosen item prices', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
   const loopCount = 3;
   for (let i = 0; i < loopCount; i += 1) {
-    await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(i).click();
+    // eslint-disable-next-line no-await-in-loop
+    await checkoutViewPage.addToCartButton.nth(i).click();
   }
   await checkoutViewPage.shoppingCartButton.click();
   await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
+  await checkoutViewPage.fillCheckoutFormFields('asd', 'asd', 'asd');
   await checkoutViewPage.continueButton.click();
   let sum = 0;
   for (let i = 0; i < loopCount; i += 1) {
-    const itemPrice = await page.locator('[data-test="inventory-item-price"]').nth(i).textContent();
+    // eslint-disable-next-line no-await-in-loop
+    const itemPrice = await checkoutViewPage.inventoryItemPrice.nth(i).textContent();
     const price = parseFloat(itemPrice.substring(1));
     sum += price;
   }
-  await expect(page.locator('[data-test="subtotal-label"]')).toHaveText(`Item total: $${sum}`);
+  await expect(checkoutViewPage.itemTotalText).toHaveText(`Item total: $${sum}`);
 });
 
 test('Verify That the "tax" is 8% of "Item Total"', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('.btn.btn_primary.btn_small.btn_inventory').nth(0).click();
-  await checkoutViewPage.shoppingCartButton.click();
-  await checkoutViewPage.checkoutButton.click();
-  await page.locator('[data-test="firstName"]').fill('asd');
-  await page.locator('[data-test="lastName"]').fill('asd');
-  await page.locator('[data-test="postalCode"]').fill('asd');
-  await checkoutViewPage.continueButton.click();
-  const itemTotal = await page.locator('[data-test="subtotal-label"]').textContent();
+  await checkoutViewPage.performCheckoutView();
+  const itemTotal = await checkoutViewPage.itemTotalText.textContent();
   const itemTotalValue = parseFloat(itemTotal.substring(13));
   const tax = (itemTotalValue * 0.08).toFixed(2);
-  await expect(page.locator('[data-test="tax-label"]')).toHaveText(`Tax: $${tax}`);
+  await expect(checkoutViewPage.taxText).toHaveText(`Tax: $${tax}`);
 });
 
 test('Verify that Total is the sum of Tax and Item Total', async ({ page }) => {
   const checkoutViewPage = new CheckoutViewPage(page);
-  await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
-  await page.goto('/checkout-step-two.html');
-  const itemTotalText = await page.textContent('.summary_subtotal_label');
-  const taxText = await page.textContent('.summary_tax_label');
+  await checkoutViewPage.performCheckoutView();
+  const itemTotalText = await checkoutViewPage.itemTotalText.textContent();
+  const taxText = await checkoutViewPage.taxText.textContent();
   const itemTotal = parseFloat(itemTotalText.substring(13));
   const tax = parseFloat(taxText.substring(6));
   const total = itemTotal + tax;
-  await expect(page.locator('[data-test="total-label"]')).toHaveText(`Total: $${total}`);
+  await expect(checkoutViewPage.totalText).toHaveText(`Total: $${total}`);
 });
