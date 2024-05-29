@@ -18,5 +18,3 @@ exports.SortingBarPage = class SortingBarPage {
     await this.sortingbutton.selectOption({ label: option });
   }
 };
-/* await page.getByText('Name (A to Z)Name (A to Z)').click();
-await page.locator('[data-test="product-sort-container"]').selectOption('za'); */

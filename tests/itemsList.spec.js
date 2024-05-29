@@ -25,44 +25,44 @@ test('Verify that by clicking add to cart it adds an item to shoping cart', asyn
   const itemnumber = 2;
   await itemsList.addtocartButton(itemnumber);
   await expect(itemsList.shoppingcart).toHaveText('1');
-  const titilename = await itemsList.producttitleSelector.nth(itemnumber).innerText();
+  const titlename = await itemsList.producttitleSelector.nth(itemnumber).innerText();
   await itemsList.clickonShoppingCart();
   await expect(page).toHaveURL('/cart.html');
-  await expect(itemsList.producttitleSelector).toHaveText(titilename);
+  await expect(itemsList.producttitleSelector).toHaveText(titlename);
 });
 test('Verify that by clicking remove  cart button, it removes the item from shoping cart', async ({ page }) => {
   const itemsList = new ItemsList(page);
   const itemnumber = 2;
   await itemsList.addtocartButton(itemnumber);
   await expect(itemsList.shoppingcart).toHaveText('1');
-  const titilename = await itemsList.producttitleSelector.nth(itemnumber).innerText();
+  const titlename = await itemsList.producttitleSelector.nth(itemnumber).innerText();
   await itemsList.clickonShoppingCart();
   await expect(page).toHaveURL('/cart.html');
   await itemsList.addtocart.nth(0).click();
-  await expect(itemsList.producttitleSelector).not.toBeVisible(titilename);
-});
-test('Verify that photos are not repetitave', async ({ page }) => {
-  const firstSrc = await page.$eval('img', (img) => img.src);
-  const secondSrc = await page.$$eval('img', (images) => images[1].src);
-  expect(firstSrc).not.toBe(secondSrc);
+  await expect(itemsList.producttitleSelector).not.toBeVisible(titlename);
 });
 
-test('Verify src attribute changes for each image version 2', async ({ page }) => {
-  const firstSrc = await page.$eval('img', (img) => img.src);
-  const allImages = await page.$$('img');
-  for (let i = 1; i < allImages.length; i += 1) {
-    const src = await allImages[i].evaluate((img) => img.src);
-    expect(src).not.toBe(firstSrc);
-  }
-});
-
+// Define a test case with the description 'Verify that pictures do not repeat'
 test('Verify that pictures do not repeat', async ({ page }) => {
+  // Create a new instance of the ItemsList page object
   const itemlist = new ItemsList(page);
+
+  // Create a new Set to store the src attributes of the product images
+  // Sets only store unique values, so this will help us check for duplicates
   const setofImages = new Set();
+
+  // Define the expected number of unique product images
   const productsCount = 6;
+
+  // Loop over the product images
   for (let i = 0; i < productsCount; i += 1) {
+    // Get the src attribute of the i-th product image
     const src = await itemlist.productImage.nth(i).getAttribute('src');
+
+    // Add the src attribute to the set of images
     setofImages.add(src);
   }
+
+  // Check if the size of the set of images is equal to the expected number of products
   await expect(setofImages.size).toBe(productsCount);
 });

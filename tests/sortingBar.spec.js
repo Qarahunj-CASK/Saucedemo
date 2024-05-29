@@ -15,44 +15,46 @@ test.beforeEach(async ({ page }) => {
 test('Verify that sorting menu bar contains 4 sorting functions', async ({ page }) => {
   const sortingBarPage = new SortingBarPage(page);
   await expect(sortingBarPage.sortingOptions).toHaveCount(4);
-  await expect(page.locator('.product_sort_container').locator('option')).toHaveCount(4);
 });
 
-test('Verify Sorting in A to Z Order is working as expected, async', async ({ page }) => {
+test('Verify Sorting in A to Z Order is working as expected', async ({ page }) => {
   const sortingBarPage = new SortingBarPage(page);
   await sortingBarPage.sortingbutton.click();
   await sortingBarPage.sortingbutton.selectOption('Name (A to Z)');
-  await expect(await sortingBarPage.itemName.first().innerText()).toBe('Sauce Labs Backpack');
+  const itemName = await sortingBarPage.itemName.allTextContents();
+  for (let i = 0; i < itemName.length - 1; i += 1) {
+    expect(itemName[i].localeCompare(itemName[i + 1])).toBeLessThanOrEqual(0);
+  }
 });
-/* await page.getByText('Name (A to Z)Name (A to Z)').click();
-  await page.locator('[data-test="product-sort-container"]').selectOption('za'); */
 
-test('Verify Sorting in Z to A Order is working as expected, async', async ({ page }) => {
+test('Verify Sorting in Z to A Order is working as expected', async ({ page }) => {
   const sortingBarPage = new SortingBarPage(page);
   await sortingBarPage.sortingbutton.click();
   await sortingBarPage.sortingbutton.selectOption('Name (Z to A)');
-  await expect(await sortingBarPage.itemName.first()).toHaveText('Test.allTheThings() T-Shirt (Red)');
+  const itemName = await sortingBarPage.itemName.allTextContents();
+  for (let i = 0; i < itemName.length - 1; i += 1) {
+    expect(itemName[i].localeCompare(itemName[i + 1])).toBeGreaterThanOrEqual(0);
+  }
 });
 
-test('Verify Sorting in Low to High Order is working as expected, async', async ({ page }) => {
+test('Verify Sorting in Low to High Order is working as expected', async ({ page }) => {
   const sortingBarPage = new SortingBarPage(page);
   await sortingBarPage.sortingbutton.click();
   await sortingBarPage.sortingbutton.selectOption('Price (low to high)');
-  await expect(await sortingBarPage.itemPrice.first()).toHaveText('$7.99');
+  const itemPrices = await sortingBarPage.itemPrice.allTextContents();
+  const prices = itemPrices.map((price) => parseFloat(price.substring(1)));
+  for (let i = 0; i < prices.length - 1; i += 1) {
+    expect(prices[i]).toBeLessThanOrEqual(prices[i + 1]);
+  }
 });
 
-test('Verify Sorting in Hight to Low Order is working as expected, async', async ({ page }) => {
+test('Verify Sorting in Hight to Low Order is working as expected', async ({ page }) => {
   const sortingBarPage = new SortingBarPage(page);
   await sortingBarPage.sortingbutton.click();
   await sortingBarPage.sortingbutton.selectOption('Price (high to low)');
-  await expect(await sortingBarPage.itemPrice.first()).toHaveText('$49.99');
-});
-
-test('Verify Sorting in Z to A Order is working as expected, async version 2/1', async ({ page }) => {
-  const sortingBarPage = new SortingBarPage(page);
-  await sortingBarPage.sortingbutton.click();
-  await sortingBarPage.sortingbutton.selectOption('Name (A to Z)');
-  const productNames = await page.$$eval('.inventory_item_name', (elements) => elements.map((el) => el.textContent));
-  const firstItemName = productNames[0];
-  await expect(firstItemName).toEqual('Sauce Labs Backpack');
+  const itemPrices = await sortingBarPage.itemPrice.allTextContents();
+  const prices = itemPrices.map((price) => parseFloat(price.substring(1)));
+  for (let i = 0; i < prices.length - 1; i += 1) {
+    expect(prices[i]).toBeGreaterThanOrEqual(prices[i + 1]);
+  }
 });
