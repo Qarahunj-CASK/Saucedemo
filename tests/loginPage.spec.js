@@ -8,6 +8,8 @@ const usernameAndPasswordError = 'Epic sadface: Username and password do not mat
 const usernameIsEmptyError = 'Epic sadface: Username is required';
 const passwordIsEmtyError = 'Epic sadface: Password is required';
 
+// test.use({ storageState: { cookies: [], origins: [] } });
+
 if (USER_NAME === 'locked_out_user') {
   test('Ensure that the login is not possible with logged out user.', async ({ page }) => {
     const loginPage = new LoginPage(page);
