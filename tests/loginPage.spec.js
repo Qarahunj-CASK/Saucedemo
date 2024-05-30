@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const { test, expect } = require('@playwright/test');
 const { LoginPage } = require('../page-objects/LoginPage');
 
@@ -21,7 +22,7 @@ if (USER_NAME === 'locked_out_user') {
     await loginPage.goto();
     await loginPage.fillUsernameField(USER_NAME);
     await loginPage.fillPasswordField(PASSWORD);
-    await loginPage.clickLoginButton(PASSWORD);
+    await loginPage.clickLoginButton();
     await expect(page.getByText('Products')).toBeVisible();
   });
 
