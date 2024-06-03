@@ -89,11 +89,21 @@ if (USER_NAME === 'locked_out_user') {
   });
 
   test('Ensure that login is possible with the Enter button.', async ({ page }) => {
+    const enterOrClick = true;
+
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.fillUsernameField(USER_NAME);
     await loginPage.fillPasswordField(PASSWORD);
-    await page.keyboard.press('Enter');
+    /*  if (enterOrClick) {
+      await page.keyboard.press('Enter');
+    } else {
+      await loginPage.clickLoginButton();
+    } */
+    /*   const enter = page.keyboard.press('Enter');
+    const click = loginPage.clickLoginButton();
+    enterOrClick ? await enter : await click; */
+    await (enterOrClick ? page.keyboard.press('Enter') : loginPage.clickLoginButton());
     await expect(page.getByText('Products')).toBeVisible();
   });
 }
